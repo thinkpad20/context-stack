@@ -2,7 +2,7 @@
 -- documentation, see http://haskell.org/cabal/users-guide/
 
 name:                context-stack
-version:             0.1.0.0
+version:             0.1.0.1
 synopsis:            An abstraction of a stack and stack-based monadic context.
 -- description:
 homepage:            http://github.com/thinkpad20/context-stack
@@ -20,6 +20,6 @@ library
   exposed-modules:     Data.ContextStack
   -- other-modules:
   other-extensions:    NoImplicitPrelude, TypeFamilies, FlexibleContexts, LambdaCase, OverloadedStrings
-  build-depends:       base >=4.7 && <4.8, classy-prelude, unordered-containers, mtl, data-default
+  build-depends:       base >=4.7 && <4.8, classy-prelude, unordered-containers, mtl
   hs-source-dirs:      src
   default-language:    Haskell2010

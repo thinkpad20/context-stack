@@ -11,7 +11,6 @@ module Data.ContextStack (
 
 import qualified Prelude as P
 import qualified Data.HashMap.Strict as H
-import Data.Default
 import Control.Monad.State.Strict
 import Control.Monad.Except
 import ClassyPrelude hiding (find, asList)
@@ -78,10 +77,10 @@ instance (Hashable key, Eq key) => KeyValueStore (HashMap key val) where
   loadBindings = H.union
 
 -- | Converts a list into a `KeyValueStore`.
-buildMap :: (Default s, KeyValueStore s, MonoFoldable collection,
+buildMap :: (KeyValueStore s, MonoFoldable collection,
                Element collection ~ (LookupKey s, StoredValue s))
             => collection -> s
-buildMap = foldr (uncurry putValue) def
+buildMap = foldr (uncurry putValue) empty
 
 -- | Stores @name => item@ on the top of the stack.
 store :: (Stack s, KeyValueStore (Frame s), MonadState s m)
@@ -134,7 +133,8 @@ withFrame elem action = pushM elem *> action <* popM
 
 -- | Performs an action with the given bindings in scope.
 withBindings :: (Stack s, KeyValueStore (Frame s), MonadState s m,
-                 Applicative m, Default (Frame s), MonoFoldable collection,
-                 Element collection ~ (LookupKey (Frame s), StoredValue (Frame s)))
+                 Applicative m, MonoFoldable collection,
+                 Element collection ~
+                   (LookupKey (Frame s), StoredValue (Frame s)))
              => collection -> m a -> m a
 withBindings bindings = withFrame (buildMap bindings)
